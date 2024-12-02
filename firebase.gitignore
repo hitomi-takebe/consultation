@@ -1,0 +1,6 @@
+# Node.js関連
+node_modules/
+dist/
+
+# Firebase設定ファイル
+config/firebaseConfig.js
