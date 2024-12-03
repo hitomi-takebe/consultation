@@ -37,8 +37,9 @@ header h1{
     width:80%;
     margin:auto;
 }
+
 /* 吹き出し内 */
-.text_box {
+.user_text_box {
     position: relative;
     display: inline-block;
     width: 100%;
@@ -46,20 +47,20 @@ header h1{
     padding-right: 1em;
     padding-left: 1em;
     border-radius: 12px;
-    background-color: #9bee8c;
+    background-color: #f2f8f8;
     text-align: left;
     font-size: 16px;
     color: #000000;
 }
 
-.text_box::after {
+.user_text_box::after {
     content: "";
     position: absolute;
     top: 35%;
     right: 0;
     border-style: solid;
     border-width: 0 0 16px 16px;
-    border-color: transparent transparent transparent #9bee8c;
+    border-color: transparent transparent transparent #f5f8fa;
     translate: 100% calc(-50% - 0.4px);
     transform: skew(0, -10deg);
     transform-origin: left;
@@ -73,4 +74,37 @@ header h1{
 .nowDate {
     margin: 0;
     text-align: right;
+}
+
+.chatey_text_box {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 1em;
+    padding-right: 1em;
+    padding-left: 1em;
+    border-radius: 12px;
+    background-color: #9bee8c;
+    text-align: left;
+    font-size: 16px;
+    color: #000000;
+}
+
+/* 矢印の方向を左側に変更 */
+.chatey_text_box::before {
+    content: "";
+    position: absolute;
+    top: 35%;
+    left: 0;
+    /* 右側から左側に変更 */
+    border-style: solid;
+    border-width: 16px 0 0 16px ;
+    /* 矢印の方向を変更 */
+    border-color: #9bee8c transparent transparent transparent;
+    translate: -100% calc(-50% + 0.4px);
+    /* 矢印を左に移動 */
+    transform: skew(0, 10deg);
+    /* skew の方向を変更 */
+    transform-origin: right;
+    /* 変形の基点を右側に設定 */
 }
