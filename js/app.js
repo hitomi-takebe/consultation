@@ -179,9 +179,6 @@ $("#analyze").on("click", function () {
             `; 
             // 最新メッセージを先頭に表示
             $("#output").prepend(html);
-            //音声出力
-            const uttr = new SpeechSynthesisUtterance(analysis);
-            window.speechSynthesis.speak(uttr);
         },
         error: function () {
             $("#response").text("エラーが発生しました。").fadeOut(3000);
