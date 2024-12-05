@@ -16,6 +16,7 @@ import {
 // Firebase初期化
 const firebaseConfig = {
 
+
 };
 
 // Firebase初期化
@@ -23,6 +24,9 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "chatey");
 console.log("Firebase initialized successfully!");
+
+// 最新10件を取得するクエリ
+// const q = query(dbRef, orderByChild("timestamp"));
 
 // ここからAPI取得
 // OpenAI APIキー
@@ -61,7 +65,7 @@ function sendMessageToOpenAI(text) {
         data: JSON.stringify({
         model: 'gpt-4',
         messages: [
-            { role: 'system', content: 'あなたは凄腕のカウンセラーです。悩みを認知行動療法のアプローチにてアドバイスしてください。ただし回答は200文字程度で、回答に「認知行動療法」の文言を入れないでください。' },//
+            { role: 'system', content: 'あなたは凄腕のカウンセラーです。悩みを認知行動療法のアプローチにてアドバイスしてください。ただし回答は200文字程度で、回答に「認知行動療法」の文言を入れないでください。また、語りかけるような言葉でお願いします。' },//
             { role: 'user', content: text }//会話履歴。ユーザーとAIのやり取りをここに記録します
         ]
         }),
@@ -119,6 +123,67 @@ onChildAdded(dbRef, function (data) {
         $("#output").prepend(html);
         console.log(html,"userのメッセージ");
     }
+});
+
+
+// 過去10件のメッセージを保存するための配列
+let UserMessages = [];
+
+// データ取得（リアルタイムで表示）
+onChildAdded(dbRef, function (data) {
+    const msg = data.val();
+    if (msg.sender === "user") {
+        console.log(msg.sender);
+        // メッセージを配列に追加（10件まで保持）
+        UserMessages.push(msg.text);
+        if (UserMessages.length > 10) {
+            UserMessages.shift(); // 配列の先頭を削除して常に10件保持
+        }
+    }
+    console.log(UserMessages,"中身の確認")
+});
+
+// メッセージ分析（ボタン押下でトリガー）
+$("#analyze").on("click", function () {
+    $('#response').append(`...考え中...`).fadeOut(3000); //考え中と表示
+    const timestamp = new Date().toLocaleString()
+    console.log(UserMessages.join('\n'), "中身の確認");
+    if (UserMessages.length === 0) {
+        $("#response").text("十分なメッセージがありません。").fadeOut(3000);
+        return;
+    }
+    // OpenAIに過去10件のメッセージを送信して分析
+    $.ajax({
+        url: 'https://api.openai.com/v1/chat/completions',
+        type: 'POST',
+        headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            model: 'gpt-4',
+            messages: [
+                { role: 'system', content: 'あなたは凄腕のカウンセラーです。以下のメッセージからこの人が抱えている悩みを分析し、まずは要約してください。その後、簡潔にフィードバックをしてください。全体で300文字程度になるようにお願いします。' },
+                { role: 'user', content: `過去のメッセージ: ${UserMessages.join('\n')}` }
+            ]
+        }),
+        success: function (response) {
+            const analysis = response.choices[0].message.content;
+            const html = `
+            <div class="message">
+            <div class="chatey_text_box"> 
+                <p class="text">《今のお悩みの分析》<br>${analysis}</p>
+            </div>
+                <p class="nowDate">${timestamp}</p> 
+            </div>
+            `; 
+            // 最新メッセージを先頭に表示
+            $("#output").prepend(html);
+        },
+        error: function () {
+            $("#response").text("エラーが発生しました。").fadeOut(3000);
+        }
+    });
 });
 
 

@@ -9,15 +9,22 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <header>
-    <h1>お悩み相談室</h1>
+    <h1>お悩み分析</h1>
 </header>
 
 <body>
-    <audio src="/audio/pikooon.mp3" id="play-button"></audio>
-
+    <!-- <audio src="/audio/pikooon.mp3" id="play-button"></audio> -->
     <div class="form">
-        <textarea id="text" placeholder="聞きたいことを入れてね"></textarea>
-        <button id="push">送信</button>
+        <p class="setumei">①お悩み相談：お悩みやもやもやしたエピソードを入れてみよう。</p>
+        <textarea id="text" placeholder="聞きたいことを入れてね"></textarea><br>
+        <button id="push" class="btn">送信</button>
+    </div>
+    <div class="analyze_wrap">
+        <p class="setumei">②分析：①で入力したお悩みから、あなたが悩んでいる内容を分析するよ（過去10件まで）</p>
+        <button id="analyze" class="btn">分析</button>
+        <div id="analysisOutput">
+        <!-- ここに分析メッセージを表示 -->
+        </div>
     </div>
     <div id="response">
         <!-- ここに応答時の内容を表示 -->

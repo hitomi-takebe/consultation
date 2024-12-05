@@ -16,7 +16,8 @@ header {
     width: 85%;
     margin: 0 auto;
     margin-top: 0.5em;
-    background: #00ADB5;
+    margin-bottom: 1em;
+    background: #D91656;
     padding: 0.5em;
     border-radius: 8em;
     text-align: left;
@@ -38,14 +39,34 @@ header h1{
     margin:auto;
 }
 
+
+#text {
+    width: 50%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 3px;
+    background: #f7f7f7;
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+#text::placeholder {
+    color: #999;
+}
+
+.setumei{
+    margin-top:1em;
+    color: #2b0311;
+    margin-bottom: 0.5em;
+}
 /* 吹き出し内 */
 .user_text_box {
     position: relative;
     display: inline-block;
     width: 100%;
-    padding-bottom: 1em;
-    padding-right: 1em;
-    padding-left: 1em;
+    padding: 0.7em;
+    margin-top:1em;
     border-radius: 12px;
     background-color: #f2f8f8;
     text-align: left;
@@ -80,14 +101,13 @@ header h1{
     position: relative;
     display: inline-block;
     width: 100%;
-    padding-bottom: 1em;
-    padding-right: 1em;
-    padding-left: 1em;
+    padding: 0.7em;
+    margin-top: 1em;
     border-radius: 12px;
-    background-color: #9bee8c;
+    background-color: #4f094f;
     text-align: left;
     font-size: 16px;
-    color: #000000;
+    color: #fff;
 }
 
 /* 矢印の方向を左側に変更 */
@@ -100,11 +120,38 @@ header h1{
     border-style: solid;
     border-width: 16px 0 0 16px ;
     /* 矢印の方向を変更 */
-    border-color: #9bee8c transparent transparent transparent;
+    border-color: #640D5F transparent transparent transparent;
     translate: -100% calc(-50% + 0.4px);
     /* 矢印を左に移動 */
     transform: skew(0, 10deg);
     /* skew の方向を変更 */
     transform-origin: right;
     /* 変形の基点を右側に設定 */
+}
+
+.btn {
+    transition: all 0.3s ease-in-out;
+    font-family: "Dosis", sans-serif;
+}
+
+.btn {
+    width: 4em;
+    height: 2em;
+    border-radius: 50px;
+    background-image: linear-gradient(135deg, #feb692 0%, #ea5455 100%);
+    /* box-shadow: 0 20px 30px -6px rgba(238, 103, 97, 0.5); */
+    outline: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1.2em;
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+
+.btn:active {
+    opacity: 0.5;
 }
