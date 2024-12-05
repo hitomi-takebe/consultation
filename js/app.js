@@ -48,7 +48,7 @@ $("#push").on("click", function () {
 });
 
 function sendMessageToOpenAI(text) {
-    $('#response').append(`...考え中...`); //考え中と表示
+    $('#response').append(`...考え中...`).fadeOut(3000); //考え中と表示
     // OpenAI APIにリクエストを送る部分。
     $.ajax({
         url: 'https://api.openai.com/v1/chat/completions',
@@ -80,6 +80,9 @@ function sendMessageToOpenAI(text) {
             console.log(msg,"newPostRefの中身を確認");
             set(newPostRef, msg);
             $('#response').val(""); //「考え中」の文言を削除
+            //音声出力
+            const uttr = new SpeechSynthesisUtterance(msg.text);
+            window.speechSynthesis.speak(uttr);
         },
         error: function () {
             $('#response').last().text('エラーが発生しました。').fadeOut(3000);//エラーメッセージを1秒後に非表示
