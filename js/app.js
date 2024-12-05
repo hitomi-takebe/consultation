@@ -1,4 +1,5 @@
 
+
 console.log("接続確認")
 // Firebase SDKをインポート
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
@@ -14,7 +15,6 @@ import {
 
 // Firebase初期化
 const firebaseConfig = {
-
 
 };
 
@@ -34,7 +34,7 @@ $("#push").on("click", function () {
     // 入力したデータを追加
     const msg = {
         sender: "user",
-        text: $("#text").val().trim(),//trimで余計な空白を削除
+        text: $("#text").val(),//trimで余計な空白を削除
         timestamp: new Date().toLocaleString(), // タイムスタンプ
     };
     // Firebase Realtime Databaseに新しいデータを追加
@@ -46,6 +46,7 @@ $("#push").on("click", function () {
     // OpenAIにメッセージを送信
     sendMessageToOpenAI(msg.text);
 });
+
 
 function sendMessageToOpenAI(text) {
     $('#response').append(`...考え中...`).fadeOut(3000); //考え中と表示
@@ -60,15 +61,14 @@ function sendMessageToOpenAI(text) {
         data: JSON.stringify({
         model: 'gpt-4',
         messages: [
-            { role: 'system', content: 'あなたは凄腕のカウンセラーです。悩みを認知行動療法のアプローチにてアドバイスしてください。' },//
+            { role: 'system', content: 'あなたは凄腕のカウンセラーです。悩みを認知行動療法のアプローチにてアドバイスしてください。ただし回答は200文字程度で、回答に「認知行動療法」の文言を入れないでください。' },//
             { role: 'user', content: text }//会話履歴。ユーザーとAIのやり取りをここに記録します
         ]
         }),
         // 成功した場合の動作
         success: function (response) {
             const reply = response.choices[0].message.content;  //**response.choices**は応答の選択肢の配列(通常は1つの応答), choices[0] で最初の応答を取得。
-            // $('#response').last().text(reply); // AIからの応答を表示
-            // console.log(reply, "replyの中身を確認");
+            $('#response').val(""); //「考え中」の文言を削除
             //msgの塊を定義
             const msg = {
             sender: "chatey",
@@ -79,7 +79,6 @@ function sendMessageToOpenAI(text) {
             const newPostRef = push(dbRef);
             console.log(msg,"newPostRefの中身を確認");
             set(newPostRef, msg);
-            $('#response').val(""); //「考え中」の文言を削除
             //音声出力
             const uttr = new SpeechSynthesisUtterance(msg.text);
             window.speechSynthesis.speak(uttr);
@@ -87,7 +86,8 @@ function sendMessageToOpenAI(text) {
         error: function () {
             $('#response').last().text('エラーが発生しました。').fadeOut(3000);//エラーメッセージを1秒後に非表示
         }
-    });
+    },
+    );
 }
 
 // データ取得（リアルタイムで表示）
@@ -122,9 +122,3 @@ onChildAdded(dbRef, function (data) {
 });
 
 
-
-
-// function appendMessage(sender, message) {
-//     $('#output').append(`<div class="message ${sender}">${message}</div>`);
-//     $('#output').scrollTop($('#text')[0].scrollHeight);
-// }
